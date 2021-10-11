@@ -13,7 +13,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const uri = process.env.ATLAS_URI;
+const uri = process.env.ATLAS_URI || 'mongodb+srv://berra:berra12345@cluster0.mj2u1.mongodb.net/Mern01?retryWrites=true&w=majority';
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
@@ -29,6 +29,9 @@ const usersRouter = require('./routes/users');  // evriting load from users Rout
 app.use('/exercises', exercisesRouter);
 app.use('/users', usersRouter);
 
+if(process.env.NODE_ENV === 'production') {
+    app.use(express.static('frontend/build'))
+}
 
 app.listen(port, () => {
     console.log(`Sever is running on port ${port}`);
